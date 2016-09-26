@@ -30,12 +30,13 @@
 int main(void)
 {
         int size;
+        bool live;
+        bool order;
         sorter *sorted;
         std::cout << "Please input size of array" << std::endl;
         std::cin >> size;
         std::cout << "If you want to type array manually type 1\
                 \nIf you want to try on live demo typr 0" << std::endl;
-        bool live;
         std::cin >> live;
         if (true == live) {
                 int *array = new int[size];
@@ -47,35 +48,36 @@ int main(void)
         } else {
                 sorted = new sorter(size);
         }
+        std::cout << "Please insert 1 for ascending order and 0 for descending order" << std::endl;
+        std::cin >> order;
         std::cout << "\n\n Original Array " << std::endl;
         sorted->print();
         sorted->startTimer();
-        sorted->doSelectionSorting();
+        sorted->doSelectionSorting(order);
         sorted->endTimer();
         std::cout << "\n\n Selection Sort - "<< sorted->getDuration() <<" ns\n\n" << std::endl;
         sorted->print();
         sorted->reset();
-        sorted->print();
         sorted->startTimer();
-        sorted->doBubbleSorting();
+        sorted->doBubbleSorting(order);
         sorted->endTimer();
         std::cout << "\n\n Bubble Sort -  "<< sorted->getDuration() <<" ns\n\n" << std::endl;
         sorted->print();
         sorted->reset();
         sorted->startTimer();
-        sorted->doInsertionSorting();
+        sorted->doInsertionSorting(order);
         sorted->endTimer();
         std::cout << "\n\n Insertion Sort - "<< sorted->getDuration() <<" ns\n\n" << std::endl;
         sorted->print();
         sorted->reset();
         sorted->startTimer();
-        sorted->doMergeSorting();
+        sorted->doMergeSorting(order);
         sorted->endTimer();
         std::cout << "\n\n Merge Sort - "<< sorted->getDuration() <<" ns\n\n" << std::endl;
         sorted->print();
         sorted->reset();
         sorted->startTimer();
-        sorted->doQuickSorting();
+        sorted->doQuickSorting(order);
         sorted->endTimer();
         std::cout << "\n\n Quick Sort - "<< sorted->getDuration() <<" ns\n\n" << std::endl;
         sorted->print();

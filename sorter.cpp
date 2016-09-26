@@ -27,7 +27,7 @@ int sorter::getSize()
         return m_size;
 }
 
-void sorter::doSelectionSorting()
+void sorter::doSelectionSorting(bool order)
 {
         unsigned int length = m_size;
         unsigned int temp;
@@ -35,7 +35,7 @@ void sorter::doSelectionSorting()
         for (int i = 0; i < m_size; i++) {
                 max = 0;
                 for (unsigned int ind = 0; ind < length; ind++) {
-                        if (m_array[ind] > m_array[max]) {
+                        if (isGreater(m_array[ind], m_array[max], order)) {
                                 max = ind;
                         }
                 }
@@ -46,7 +46,7 @@ void sorter::doSelectionSorting()
         }
 }
 
-void sorter::doBubbleSorting()
+void sorter::doBubbleSorting(bool order)
 {
         bool sorted = false;
         int pass = 1;
@@ -54,7 +54,7 @@ void sorter::doBubbleSorting()
         while (!sorted && pass < n) {
                 sorted = true;
                 for (int i = 0; i < n - pass; i++) {
-                        if (m_array[i] > m_array[i + 1]) {
+                        if (isGreater(m_array[i], m_array[i+1], order)) {
                                 m_array[i] = m_array[i] + m_array[i+1];
                                 m_array[i+1] = m_array[i] - m_array[i+1];
                                 m_array[i] = m_array[i] - m_array[i+1];
@@ -65,7 +65,7 @@ void sorter::doBubbleSorting()
         }
 }
 
-void sorter::doInsertionSorting()
+void sorter::doInsertionSorting(bool order)
 {
         int n = m_size;
         int next;
@@ -73,15 +73,15 @@ void sorter::doInsertionSorting()
         for (int unsorted = 1; unsorted < n; unsorted++) {
                 next = m_array[unsorted];
                 loc = unsorted;
-                while (loc > 0 && m_array[loc - 1] > next) {
+                while (loc > 0 && isGreater(m_array[loc - 1], next, order)) {
                         m_array[loc] = m_array[loc -1];
                         loc--;
+                        m_array[loc] = next;
                 }
-                m_array[loc] = next;
         }
 }
 
-void sorter::doMergeSorting(int start, int end)
+void sorter::doMergeSorting(bool order, int start, int end)
 {
         if (end == -1) {
                 end = m_size - 1;
@@ -89,13 +89,13 @@ void sorter::doMergeSorting(int start, int end)
         if ((end - start) < 1) {
 
         } else {
-                doMergeSorting(start, (end+start)/2);
-                doMergeSorting((end+start)/2+1, end);
-                merge(start, end);
+                doMergeSorting(order, start, (end+start)/2);
+                doMergeSorting(order, (end+start)/2+1, end);
+                merge(start, end, order);
         }
 }
 
-void sorter::doQuickSorting(int left, int right)
+void sorter::doQuickSorting(bool order, int left, int right)
 {
         if (right == -1) {
                 right = m_size - 1;
@@ -104,13 +104,13 @@ void sorter::doQuickSorting(int left, int right)
 
         } else {
                 int pivot = findPivot(left, right);
-                int partition = doPartitioning(m_array[pivot], left, right);
-                doQuickSorting(left, partition - 1);
-                doQuickSorting(partition + 1, right);
+                int partition = doPartitioning(m_array[pivot], left, right, order);
+                doQuickSorting(order, left, partition - 1);
+                doQuickSorting(order, partition + 1, right);
         }
 }
 
-void sorter::merge(int start, int end)
+void sorter::merge(int start, int end, bool order)
 {
         int div = (start + end)/2 + 1;
         int *new_array = new int[m_size];
@@ -121,7 +121,7 @@ void sorter::merge(int start, int end)
         int right_ind = div;
         int new_ind = start;
         while (left_ind < div && right_ind <= end) {
-                if (m_array[left_ind] < m_array[right_ind]) {
+                if (isGreater(m_array[right_ind], m_array[left_ind], order)) {
                         new_array[new_ind] = m_array[left_ind];
                         new_ind++;
                         left_ind++;
@@ -177,16 +177,16 @@ int sorter::findPivot(int left, int right) {
         //TODO - fix this part
 }
 
-int sorter::doPartitioning(int pivot, int left, int right)
+int sorter::doPartitioning(int pivot, int left, int right, bool order)
 {
         int leftPointer = left;
         int rightPointer = right;
         while (true) {
-                while (m_array[leftPointer] < pivot) {
+                while (isGreater(pivot, m_array[leftPointer], order)) {
                         leftPointer++;
                 }
 
-                while (rightPointer > 0 && m_array[rightPointer] > pivot)  {
+                while (rightPointer > 0 && isGreater(m_array[rightPointer], pivot, order))  {
                         rightPointer--;
                 }
 
@@ -231,6 +231,21 @@ void sorter::reset()
         for (int i = 0; i < m_size; i++){
                 m_array[i] = m_original_array[i];
         }
+}
+
+bool sorter::isGreater(int a, int b, bool asc)
+{
+        if (a > b && asc) {
+                return true;
+        } else if (b > a && asc) {
+                return false;
+        } else if (a > b && !asc) {
+                return false;
+        } else if (b > a && !asc) {
+                return true;
+        }
+
+        return 0;
 }
 
 sorter::sorter(int s, int* ar)

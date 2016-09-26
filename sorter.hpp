@@ -38,19 +38,20 @@ public:
         int getSize();
 
         /// Sorting methods
-        void doSelectionSorting();
-        void doBubbleSorting();
-        void doInsertionSorting();
-        void doMergeSorting(int = 0, int = -1);
-        void doQuickSorting(int = 0, int = -1);
+        void doSelectionSorting(bool = true);
+        void doBubbleSorting(bool = true);
+        void doInsertionSorting(bool = true);
+        void doMergeSorting(bool = true, int = 0, int = -1);
+        void doQuickSorting(bool = true, int = 0, int = -1);
 
 private:
         /// Private assissting functions
-        void merge(int, int);
+        void merge(int, int, bool = true);
         void swap(int&, int&);
         int findPivot(int, int);
-        int doPartitioning(int, int, int);
+        int doPartitioning(int, int, int, bool = true);
         void reverse();
+        bool isGreater(int, int, bool = true);
 public:
         /// Public assissting functions
         void print();
