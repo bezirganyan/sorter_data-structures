@@ -18,19 +18,32 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <time.h>
 
 // Headers from this project
 #include "sorter.hpp"
 
-int sorter::getSize()
+//Template type explicit definitions
+template class sorter<int>;
+template class sorter<unsigned int>;
+template class sorter<long>;
+template class sorter<long long>;
+template class sorter<float>;
+template class sorter<double>;
+//template class sorter<char>;
+//TODO - make it workable with chars
+
+template <class T>
+int sorter<T>::getSize()
 {
         return m_size;
 }
 
-void sorter::doSelectionSorting(bool order)
+template <class T>
+void sorter<T>::doSelectionSorting(bool order)
 {
         unsigned int length = m_size;
-        unsigned int temp;
+        T temp;
         unsigned int max;
         for (int i = 0; i < m_size; i++) {
                 max = 0;
@@ -46,7 +59,8 @@ void sorter::doSelectionSorting(bool order)
         }
 }
 
-void sorter::doBubbleSorting(bool order)
+template <class T>
+void sorter<T>::doBubbleSorting(bool order)
 {
         bool sorted = false;
         int pass = 1;
@@ -65,10 +79,11 @@ void sorter::doBubbleSorting(bool order)
         }
 }
 
-void sorter::doInsertionSorting(bool order)
+template <class T>
+void sorter<T>::doInsertionSorting(bool order)
 {
         int n = m_size;
-        int next;
+        T next;
         int loc;
         for (int unsorted = 1; unsorted < n; unsorted++) {
                 next = m_array[unsorted];
@@ -81,7 +96,8 @@ void sorter::doInsertionSorting(bool order)
         }
 }
 
-void sorter::doMergeSorting(bool order, int start, int end)
+template <class T>
+void sorter<T>::doMergeSorting(bool order, int start, int end)
 {
         if (end == -1) {
                 end = m_size - 1;
@@ -95,7 +111,8 @@ void sorter::doMergeSorting(bool order, int start, int end)
         }
 }
 
-void sorter::doQuickSorting(bool order, int left, int right)
+template <class T>
+void sorter<T>::doQuickSorting(bool order, int left, int right)
 {
         if (right == -1) {
                 right = m_size - 1;
@@ -110,10 +127,11 @@ void sorter::doQuickSorting(bool order, int left, int right)
         }
 }
 
-void sorter::merge(int start, int end, bool order)
+template <class T>
+void sorter<T>::merge(int start, int end, bool order)
 {
         int div = (start + end)/2 + 1;
-        int *new_array = new int[m_size];
+        T *new_array = new T[m_size];
         for (int i = 0; i < m_size; i++) {
                 new_array[i] = m_array[i];
         }
@@ -147,13 +165,16 @@ void sorter::merge(int start, int end, bool order)
         }
 }
 
-void sorter::swap(int &a, int &b) {
-        a = a + b;
-        b = a - b;
-        a = a - b;
+template <class T>
+void sorter<T>::swap(T &a, T &b) {
+        T temp = a;
+        a = b;
+        b = temp;
 }
 
-int sorter::findPivot(int left, int right) {
+template <class T>
+int sorter<T>::findPivot(int left, int right) {
+        srand (time(NULL));
         int rand_1 = (rand() % (right-left)) + left;
         //int rand_2 = (rand() % (right-left)) + left;
         //int rand_3 = (rand() % (right-left)) + left;
@@ -177,7 +198,8 @@ int sorter::findPivot(int left, int right) {
         //TODO - fix this part
 }
 
-int sorter::doPartitioning(int pivot, int left, int right, bool order)
+template <class T>
+int sorter<T>::doPartitioning(T pivot, int left, int right, bool order)
 {
         int leftPointer = left;
         int rightPointer = right;
@@ -192,7 +214,7 @@ int sorter::doPartitioning(int pivot, int left, int right, bool order)
 
                 if (leftPointer >= rightPointer) {
                         break;
-                } else if (m_array[leftPointer] == m_array[rightPointer]) {
+                } else if (!(m_array[leftPointer] > m_array[rightPointer]) && !(m_array[leftPointer] < m_array[rightPointer])) {
                         leftPointer++;
                 } else {
                         swap(m_array[leftPointer], m_array[rightPointer]);
@@ -202,7 +224,8 @@ int sorter::doPartitioning(int pivot, int left, int right, bool order)
         return leftPointer;
 }
 
-void sorter::print()
+template <class T>
+void sorter<T>::print()
 {
         for (int i = 0; i < m_size; i++) {
                 std::cout << "[" <<  m_array[i] << "] ";
@@ -210,30 +233,35 @@ void sorter::print()
         std::cout << std::endl;
 }
 
-void sorter::startTimer()
+template <class T>
+void sorter<T>::startTimer()
 {
         m_time_1 = std::chrono::high_resolution_clock::now();
 }
 
-void sorter::endTimer()
+template <class T>
+void sorter<T>::endTimer()
 {
         m_time_2 = std::chrono::high_resolution_clock::now();
         m_time = std::chrono::duration_cast<std::chrono::nanoseconds>(m_time_2 - m_time_1).count();
 }
 
-long sorter::getDuration()
+template <class T>
+long sorter<T>::getDuration()
 {
         return m_time;
 }
 
-void sorter::reset()
+template <class T>
+void sorter<T>::reset()
 {
         for (int i = 0; i < m_size; i++){
                 m_array[i] = m_original_array[i];
         }
 }
 
-bool sorter::isGreater(int a, int b, bool asc)
+template <class T>
+bool sorter<T>::isGreater(T a, T b, bool asc)
 {
         if (a > b && asc) {
                 return true;
@@ -248,14 +276,16 @@ bool sorter::isGreater(int a, int b, bool asc)
         return 0;
 }
 
-sorter::sorter(int s, int* ar)
+template <class T>
+sorter<T>::sorter(int s, T* ar)
 {
         m_size = s;
-        m_array = new int[m_size];
-        m_original_array = new int[m_size];
+        m_array = new T[m_size];
+        m_original_array = new T[m_size];
         if (ar == nullptr) {
                 for (int i = 0; i < m_size; i++) {
-                        m_array[i] = rand() % m_size;
+                        srand (time(NULL));
+                        m_array[i] = (static_cast <T> (rand())) /(static_cast <float> (RAND_MAX/(m_size - 0)));
                 }
         } else {
                 m_array = ar;
@@ -265,7 +295,8 @@ sorter::sorter(int s, int* ar)
         }
 }
 
-sorter::~sorter()
+template <class T>
+sorter<T>::~sorter()
 {
         //destructor
 }

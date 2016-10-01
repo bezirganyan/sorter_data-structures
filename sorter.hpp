@@ -20,13 +20,14 @@
 //Headers from standartd libraries
 #include <chrono>
 
+template <class T>
 class sorter
 {
 private:
         /// Private data members
 
-        int *m_array;
-        int *m_original_array;
+        T *m_array;
+        T *m_original_array;
         int m_size;
         long m_time;
         bool m_timer;
@@ -47,11 +48,11 @@ public:
 private:
         /// Private assissting functions
         void merge(int, int, bool = true);
-        void swap(int&, int&);
+        void swap(T&, T&);
         int findPivot(int, int);
-        int doPartitioning(int, int, int, bool = true);
+        int doPartitioning(T, int, int, bool = true);
         void reverse();
-        bool isGreater(int, int, bool = true);
+        bool isGreater(T, T, bool = true);
 public:
         /// Public assissting functions
         void print();
@@ -61,11 +62,10 @@ public:
         void reset();
 
         /// Constructor
-        sorter(int, int* = nullptr);
+        sorter(int, T* = nullptr);
 
         /// Destructor
         ~sorter();
 
 };
-
 #endif //SORTING_HPP

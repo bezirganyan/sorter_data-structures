@@ -32,7 +32,7 @@ int main(void)
         int size;
         bool live;
         bool order;
-        sorter *sorted;
+        sorter<int> *sorted;
         std::cout << "Please input size of array" << std::endl;
         std::cin >> size;
         std::cout << "If you want to type array manually type 1\
@@ -44,9 +44,9 @@ int main(void)
                 for (int i = 0; i < size; i++) {
                         std::cin >> array[i];
                 }
-                sorted = new sorter(size, array);
+                sorted = new sorter<int>(size, array);
         } else {
-                sorted = new sorter(size);
+                sorted = new sorter<int>(size);
         }
         std::cout << "Please insert 1 for ascending order and 0 for descending order" << std::endl;
         std::cin >> order;
