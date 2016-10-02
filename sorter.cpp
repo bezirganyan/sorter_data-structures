@@ -174,7 +174,7 @@ void sorter<T>::swap(T &a, T &b) {
 
 template <class T>
 int sorter<T>::findPivot(int left, int right) {
-        srand (time(NULL));
+        srand(time(NULL));
         int rand_1 = (rand() % (right-left)) + left;
         //int rand_2 = (rand() % (right-left)) + left;
         //int rand_3 = (rand() % (right-left)) + left;
@@ -208,13 +208,15 @@ int sorter<T>::doPartitioning(T pivot, int left, int right, bool order)
                         leftPointer++;
                 }
 
-                while (rightPointer > 0 && isGreater(m_array[rightPointer], pivot, order))  {
+                while (rightPointer > 0 &&
+                                isGreater(m_array[rightPointer], pivot, order)) {
                         rightPointer--;
                 }
 
                 if (leftPointer >= rightPointer) {
                         break;
-                } else if (!(m_array[leftPointer] > m_array[rightPointer]) && !(m_array[leftPointer] < m_array[rightPointer])) {
+                } else if (!(m_array[leftPointer] > m_array[rightPointer]) &&
+                                !(m_array[leftPointer] < m_array[rightPointer])) {
                         leftPointer++;
                 } else {
                         swap(m_array[leftPointer], m_array[rightPointer]);
@@ -243,7 +245,8 @@ template <class T>
 void sorter<T>::endTimer()
 {
         m_time_2 = std::chrono::high_resolution_clock::now();
-        m_time = std::chrono::duration_cast<std::chrono::nanoseconds>(m_time_2 - m_time_1).count();
+        m_time = std::chrono::duration_cast<std::chrono::nanoseconds>
+                (m_time_2 - m_time_1).count();
 }
 
 template <class T>
@@ -283,9 +286,10 @@ sorter<T>::sorter(int s, T* ar)
         m_array = new T[m_size];
         m_original_array = new T[m_size];
         if (ar == nullptr) {
+                srand(time(NULL));
                 for (int i = 0; i < m_size; i++) {
-                        srand (time(NULL));
-                        m_array[i] = (static_cast <T> (rand())) /(static_cast <float> (RAND_MAX/(m_size - 0)));
+                        m_array[i] = (static_cast <T> (rand()))
+                                /(static_cast <T> (RAND_MAX/(m_size - 0)));
                 }
         } else {
                 m_array = ar;
