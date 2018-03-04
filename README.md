@@ -1,4 +1,4 @@
-### Sorting Algorithms
+# Sorting Algorithms
 ## Description
 This is a library which implements common sorting algorthms in C++:
 * [Selection Sort](https://www.tutorialspoint.com/data_structures_algorithms/selection_sort_algorithm.htm)
